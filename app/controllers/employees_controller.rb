@@ -1,5 +1,5 @@
 class EmployeesController < ApplicationController
-    before_action :load_object!, only: [:show, :delete]
+    before_action :load_object!, only: [:show, :delete, :update]
 
     def index
         employees = Employee.all
@@ -16,16 +16,55 @@ class EmployeesController < ApplicationController
         end
 
         employees = employees.map do |employee|
-            {
-                id: employee.id,
-                firstName: employee.first_name,
-                lastName: employee.last_name,
-                gender: employee.gender,
-                mobileNumber: employee.mobile_number
-            }
+            employee.to_h
         end
 
         render :json => employees
+    end
+
+    def update
+        first_name      = params[:first_name]
+        last_name       = params[:last_name]
+        gender          = params[:gender]
+        mobile_number   = params[:mobile_number]
+
+        cmd = SaveEmployee.new(
+            employee:       @employee,
+            first_name:     first_name,
+            last_name:      last_name,
+            gender:         gender,
+            mobile_number:  mobile_number
+        )
+
+        cmd.execute!
+
+        if cmd.valid?
+            render json: cmd.employee.to_h
+        else
+            render json: cmd.payload, status: :unprocessable_entity
+        end
+    end
+
+    def create
+        first_name      = params[:first_name]
+        last_name       = params[:last_name]
+        gender          = params[:gender]
+        mobile_number   = params[:mobile_number]
+
+        cmd = SaveEmployee.new(
+            first_name:     first_name,
+            last_name:      last_name,
+            gender:         gender,
+            mobile_number:  mobile_number
+        )
+
+        cmd.execute!
+
+        if cmd.valid?
+            render json: cmd.employee.to_h
+        else
+            render json: cmd.payload, status: :unprocessable_entity
+        end
     end
 
     def show
