@@ -4,4 +4,7 @@ Rails.application.routes.draw do
   delete "/employees/:id", to: "employees#delete"
   post "/employees", to: "employees#create"
   put "/employees/:id", to: "employees#update"
+
+  get "/employees/:employee_id/rates", to: "rates#index"
+  post "/employees/:employee_id/rates", to: "rates#create"
 end

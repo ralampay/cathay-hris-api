@@ -1,6 +1,8 @@
 class Employee < ApplicationRecord
     GENDERS = ["M", "F"]
 
+    has_many :rates
+
     def to_h
         {
             id: self.id,
