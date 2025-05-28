@@ -54,7 +54,7 @@ class SaveEmployee < Validator
 
             if @gender.blank?
                 @payload[:gender] << "required"
-            elsif !Employee::GENDERS.includes?(@gender)
+            elsif !Employee::GENDERS.include?(@gender)
                 @payload[:gender] << "invalid value"
             end
 
