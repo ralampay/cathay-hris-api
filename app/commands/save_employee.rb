@@ -79,7 +79,9 @@ class SaveEmployee < Validator
             # Validate for existing record
             if @mobile_number.present?
                 if @first_name.present? and @last_name.present?
-                    existing_employee = Employee.where(
+                    existing_employee = Employee.where.not(
+                        id: @employee.id
+                    ).where(
                         first_name: @first_name,
                         last_name: @last_name,
                         mobile_number: @mobile_number
